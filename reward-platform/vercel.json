@@ -1,0 +1,3 @@
+{
+  "buildCommand": "NODE_OPTIONS=--max-old-space-options=4096 next build"
+}
