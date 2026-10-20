@@ -1,0 +1,46 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(USER)
+  balance   Int      @default(0)
+  orders    Order[]
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id             String      @id @default(uuid())
+  userId         String
+  user           User        @relation(fields: [userId], references: [id])
+  productType    String
+  targetUrl      String
+  keyword        String
+  targetQuantity Int
+  currentCount   Int         @default(0)
+  status         OrderStatus @default(PENDING)
+  memo           String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
